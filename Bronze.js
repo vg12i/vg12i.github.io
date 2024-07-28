@@ -17,7 +17,7 @@ svg.append("text")
     .attr("text-anchor", "middle")
     .attr("font-size", "24px")
     .attr("fill", "black")
-    .text("Bronze Medals in the Olympics Over the Years");
+    .text("Bronze Medals in the Summer Olympics Over the Years");
 
 // Load the data
 d3.csv("data.csv").then(data => {
