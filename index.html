@@ -3,87 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CS416 Project: Team USA's Performance in the Olympics</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
-    header {
-      background-color: #4a90e2;
-      color: #ffffff;
-      padding: 20px;
-      font-size: 24px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .dropdown {
-      margin: 20px 0;
-    }
-    .dropdown button {
-      background-color: #ffffff;
-      border: 2px solid #4a90e2;
-      color: #4a90e2;
-      font-size: 16px;
-      padding: 10px 20px;
-      margin: 5px;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    .dropdown button:hover {
-      background-color: #4a90e2;
-      color: #ffffff;
-    }
-    .pic img {
-      width: 200px;
-      height: auto;
-      border: 2px solid #4a90e2;
-      border-radius: 10px;
-    }
-  </style>
-  <script src="https://d3js.org/d3.v6.min.js"></script>
+    <title>CS416 Project: Olympic Medals Visualization</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        header {
+            background-color: #4a90e2;
+            color: #ffffff;
+            padding: 20px;
+            font-size: 24px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .dropdown {
+            margin: 20px 0;
+        }
+        .dropdown button {
+            background-color: #ffffff;
+            border: 2px solid #4a90e2;
+            color: #4a90e2;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dropdown button:hover {
+            background-color: #4a90e2;
+            color: #ffffff;
+        }
+        .chart {
+            margin: 40px;
+        }
+        .axis text {
+            font-size: 12px;
+        }
+        .axis path,
+        .axis line {
+            fill: none;
+            shape-rendering: crispEdges;
+        }
+        .bar {
+            fill: steelblue;
+        }
+        .bar:hover {
+            fill: orange;
+        }
+        .tooltip {
+        position: absolute;
+        text-align: center;
+        width: auto;
+        height: auto;
+        padding: 5px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+        opacity: 0;
+      }
+
+    </style>
 </head>
 <body>
 
-  <header>
-    Olympics Gold Medal Data Visualization:<br>
-    Team USA VS The World
-  </header>
+    <header>
+        <br>
+        <br>
+        Olympics Medal Data Visualization by Country
+    </header>
 
-  <div class="dropdown">
-    <button onclick="Home()">Homescreen</button>
-    <button onclick="Summer()">Summer Olympics</button>
-    <button onclick="Winter()">Winter Olympics</button>
-    <button onclick="SummerWinter()">Summer and Winter Olympics</button>
-  </div>
+    <div class="dropdown">
+        <button onclick="Home()">Homescreen</button>
+        <button onclick="Gold()">Gold</button>
+        <button onclick="Silver()">Silver</button>
+        <button onclick="Bronze()">Bronze</button>
+    </div>
 
-  <div class="pic">
-    <img src="https://static.wikia.nocookie.net/logopedia/images/d/d3/United_States_Olympic_Team_logo.png/revision/latest?cb=20130828202858" alt="Team USA Olympic Logo">
-  </div>
-
-  <script>
-    function Home() {
-      window.location.href = "index.html";
-    }
-    function Summer() {
-      window.location.href = "summer.html";
-    }
-    function Winter() {
-      window.location.href = "winter.html";
-    }
-    function SummerWinter() {
-      window.location.href = "summerwinter.html";
-    }
-  </script>
-
+    <div id="visualization"></div>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 // script.js
 
 // Define the dimensions of the SVG container
-const margin = { top: 20, right: 30, bottom: 40, left: 60 }; // Adjusted left margin for more space
+const margin = { top: 50, right: 30, bottom: 70, left: 60 }; // Adjusted margins for more space
 const width = 960 - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 
@@ -11,6 +11,15 @@ const svg = d3.select("#visualization").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// Add a title to the graph
+svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", -20)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "24px")
+    .attr("fill", "black")
+    .text("Gold Medals in the Olympics Over the Years");
 
 // Load the data
 d3.csv("data.csv").then(data => {
@@ -57,7 +66,7 @@ d3.csv("data.csv").then(data => {
         .call(xAxis)
       .append("text")
         .attr("x", width / 2)
-        .attr("y", margin.bottom - 5)
+        .attr("y", margin.bottom - 10)
         .attr("text-anchor", "middle")
         .attr("fill", "black")
         .text("Year");
@@ -68,7 +77,7 @@ d3.csv("data.csv").then(data => {
       .append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -height / 2)
-        .attr("y", -margin.left + 40) // Adjusted position for more space
+        .attr("y", -margin.left + 10)
         .attr("text-anchor", "middle")
         .attr("fill", "black")
         .text("Number of Medals");
@@ -96,6 +105,17 @@ d3.csv("data.csv").then(data => {
         .attr("r", 4)
         .attr("fill", "gray");
 
+    // Add text for total data (permanent display)
+    svg.selectAll(".totalText")
+        .data(totalGoldMedalsData)
+      .enter().append("text")
+        .attr("class", "totalText")
+        .attr("x", d => x(d.Year) + x.bandwidth() / 2)
+        .attr("y", d => y(d.GoldMedals) - 10)
+        .attr("text-anchor", "middle")
+        .attr("fill", "gray")
+        .text(d => d.GoldMedals);
+
     // Add tooltips for total data
     const tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
@@ -105,7 +125,7 @@ d3.csv("data.csv").then(data => {
         tooltip.transition()
             .duration(200)
             .style("opacity", .9);
-        tooltip.html("Year: " + d.Year + "<br/>" + "Gold Medals: " + d.GoldMedals)
+        tooltip.html("Year: " + d.Year + "<br/>" + "Venue: " + d.City)
             .style("left", (event.pageX + 5) + "px")
             .style("top", (event.pageY - 28) + "px");
     })
@@ -115,23 +135,48 @@ d3.csv("data.csv").then(data => {
             .style("opacity", 0);
     });
 
-    // Add dropdown for country selection
-    const countryDropdown = d3.select("body").append("select")
+    // Add explanatory text for country selection
+    d3.select("body").append("div")
+        .attr("class", "country-selection")
+        .html("<p>Select another country to compare:</p>")
+      .append("select")
         .attr("id", "countryDropdown")
+        .style("margin-right", "10px") // Add margin to right
         .on("change", updateCountry);
 
+    // Add button for toggling USA line
+    d3.select("body").append("div")
+        .attr("class", "toggle-usa")
+        .style("display", "inline-block")
+        .html("<p>Add/Remove USA:</p>")
+      .append("button")
+        .attr("id", "toggleUSAButton")
+        .text("Toggle USA")
+        .style("margin-left", "10px") // Add margin to left
+        .on("click", toggleUSA);
+
+    // Style the dropdown and button
+    d3.select("#countryDropdown")
+        .style("padding", "5px")
+        .style("border-radius", "5px")
+        .style("border", "1px solid #ccc");
+
+    d3.select("#toggleUSAButton")
+        .style("padding", "5px 10px")
+        .style("border-radius", "5px")
+        .style("border", "1px solid #ccc")
+        .style("background-color", "#f0f0f0");
+
+    // Align dropdown and button in parallel
+    d3.select(".country-selection")
+        .style("display", "inline-block");
+
     const countries = Array.from(new Set(data.map(d => d.Country)));
-    countryDropdown.selectAll("option")
+    d3.select("#countryDropdown").selectAll("option")
         .data(countries)
       .enter().append("option")
         .text(d => d)
         .attr("value", d => d);
-
-    // Add button for toggling USA line
-    const toggleButton = d3.select("body").append("button")
-        .attr("id", "toggleUSAButton")
-        .text("Add/Remove USA")
-        .on("click", toggleUSA);
 
     let usaLineVisible = false;
 
@@ -156,7 +201,7 @@ d3.csv("data.csv").then(data => {
                 .datum(filteredGoldMedalsData)
                 .attr("class", "countryLine")
                 .attr("fill", "none")
-                .attr("stroke", "steelblue")
+                .attr("stroke", "indianred")
                 .attr("stroke-width", 2)
                 .attr("d", line);
 
@@ -167,7 +212,7 @@ d3.csv("data.csv").then(data => {
                 .attr("cx", d => x(d.Year) + x.bandwidth() / 2)
                 .attr("cy", d => y(d.GoldMedals))
                 .attr("r", 4)
-                .attr("fill", "steelblue");
+                .attr("fill", "indianred");
 
             const countryText = svg.selectAll(".countryText")
                 .data(filteredGoldMedalsData)
@@ -176,7 +221,7 @@ d3.csv("data.csv").then(data => {
                 .attr("x", d => x(d.Year) + x.bandwidth() / 2)
                 .attr("y", d => y(d.GoldMedals) - 10)
                 .attr("text-anchor", "middle")
-                .attr("fill", "steelblue")
+                .attr("fill", "indianred")
                 .style("display", "none")
                 .text(d => d.GoldMedals);
 
@@ -203,7 +248,7 @@ d3.csv("data.csv").then(data => {
                 .datum(usaGoldMedalsData)
                 .attr("class", "usaLine")
                 .attr("fill", "none")
-                .attr("stroke", "red")
+                .attr("stroke", "steelblue")
                 .attr("stroke-width", 2)
                 .attr("d", line);
 
@@ -214,7 +259,7 @@ d3.csv("data.csv").then(data => {
                 .attr("cx", d => x(d.Year) + x.bandwidth() / 2)
                 .attr("cy", d => y(d.GoldMedals))
                 .attr("r", 4)
-                .attr("fill", "red");
+                .attr("fill", "steelblue");
 
             const usaText = svg.selectAll(".usaText")
                 .data(usaGoldMedalsData)
@@ -223,7 +268,7 @@ d3.csv("data.csv").then(data => {
                 .attr("x", d => x(d.Year) + x.bandwidth() / 2)
                 .attr("y", d => y(d.GoldMedals) - 10)
                 .attr("text-anchor", "middle")
-                .attr("fill", "red")
+                .attr("fill", "steelblue")
                 .style("display", "none")
                 .text(d => d.GoldMedals);
 
@@ -238,74 +283,50 @@ d3.csv("data.csv").then(data => {
         }
     }
 
+    // Add legend
+    const legend = svg.append("g")
+        .attr("class", "legend")
+        .attr("transform", "translate(0," + (height + 40) + ")");
+
+    legend.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", "gray");
+
+    legend.append("text")
+        .attr("x", 24)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .text("Total Medals");
+
+    legend.append("rect")
+        .attr("x", 120)
+        .attr("y", 0)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", "steelblue");
+
+    legend.append("text")
+        .attr("x", 144)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .text("USA");
+
+    legend.append("rect")
+        .attr("x", 220)
+        .attr("y", 0)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", "indianred");
+
+    legend.append("text")
+        .attr("x", 244)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .text("Selected Country");
+
     // Initialize the graph with the first country in the dropdown
     updateCountry();
-    // Create scenes for the martini glass structure
-    createScenes();
 });
-
-function createScenes() {
-    // Define the scenes
-    const scenes = [
-        {
-            title: "Overview of Olympic Medals",
-            description: "This chart shows the distribution of Olympic medals over the years."
-        },
-        {
-            title: "Gold Medals by Year",
-            description: "Here we focus on the gold medals won each year."
-        },
-        {
-            title: "Explore by Country",
-            description: "Use the dropdown to explore medals by country."
-        }
-    ];
-
-    // Add scene elements
-    const sceneContainer = d3.select("#visualization")
-        .append("div")
-        .attr("class", "scenes");
-
-    scenes.forEach((scene, index) => {
-        const sceneDiv = sceneContainer.append("div")
-            .attr("class", "scene")
-            .attr("id", "scene-" + index);
-
-        sceneDiv.append("h2")
-            .text(scene.title);
-
-        sceneDiv.append("p")
-            .text(scene.description);
-    });
-
-    // Create a new container for the legend
-    const legendContainer = d3.select("#visualization").append("div")
-        .attr("class", "legend-container");
-
-    // Define the legend data
-    const legendData = [
-        { name: "Total Gold Medals", color: "gray" },
-        { name: "Selected Country", color: "steelblue" },
-        { name: "USA", color: "red" }
-    ];
-
-    // Create a legend group
-    const legend = legendContainer.selectAll(".legend")
-        .data(legendData)
-      .enter().append("div")
-        .attr("class", "legend-item");
-
-    // Add colored rectangles for each legend item
-    legend.append("div")
-        .style("display", "inline-block")
-        .style("width", "18px")
-        .style("height", "18px")
-        .style("background-color", d => d.color);
-
-    // Add text for each legend item
-    legend.append("div")
-        .style("display", "inline-block")
-        .style("padding-left", "5px")
-        .text(d => d.name);
-
-}
