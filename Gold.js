@@ -1,5 +1,5 @@
 // Define the dimensions of the SVG container
-const margin = { top: 50, right: 30, bottom: 70, left: 60 }; // Adjusted margins for more space
+const margin = { top: 50, right: 30, bottom: 70, left: 60 };
 const width = 960 - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 
@@ -307,26 +307,26 @@ d3.csv("data.csv").then(data => {
         .attr("y", 0)
         .attr("width", 18)
         .attr("height", 18)
-        .style("fill", "steelblue");
+        .style("fill", "indianred");
 
     legend.append("text")
         .attr("x", 145)
         .attr("y", 9)
         .attr("dy", ".35em")
-        .text("USA");
+        .text("Selected Country");
 
     legend.append("rect")
-        .attr("x", 195)
+        .attr("x", 280)
         .attr("y", 0)
         .attr("width", 18)
         .attr("height", 18)
-        .style("fill", "indianred");
+        .style("fill", "steelblue");
 
     legend.append("text")
-        .attr("x", 215)
+        .attr("x", 300)
         .attr("y", 9)
         .attr("dy", ".35em")
-        .text("Selected Country");
+        .text("USA");
 
     // Initialize the graph with the first country in the dropdown
     updateCountry();

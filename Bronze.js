@@ -296,7 +296,7 @@ d3.csv("data.csv").then(data => {
         .attr("height", 18)
         .style("fill", "gray");
 
-        legend.append("text")
+    legend.append("text")
         .attr("x", 20)
         .attr("y", 9)
         .attr("dy", ".35em")
@@ -307,26 +307,26 @@ d3.csv("data.csv").then(data => {
         .attr("y", 0)
         .attr("width", 18)
         .attr("height", 18)
-        .style("fill", "steelblue");
+        .style("fill", "indianred");
 
     legend.append("text")
         .attr("x", 145)
         .attr("y", 9)
         .attr("dy", ".35em")
-        .text("USA");
+        .text("Selected Country");
 
     legend.append("rect")
-        .attr("x", 195)
+        .attr("x", 280)
         .attr("y", 0)
         .attr("width", 18)
         .attr("height", 18)
-        .style("fill", "indianred");
+        .style("fill", "steelblue");
 
     legend.append("text")
-        .attr("x", 215)
+        .attr("x", 300)
         .attr("y", 9)
         .attr("dy", ".35em")
-        .text("Selected Country");
+        .text("USA");
 
     // Initialize the graph with the first country in the dropdown
     updateCountry();
