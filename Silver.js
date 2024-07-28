@@ -78,7 +78,7 @@ d3.csv("data.csv").then(data => {
         .attr("y", -margin.left + 10)
         .attr("text-anchor", "middle")
         .attr("fill", "black")
-        .text("Number of Medals");
+        .text("Number of Medals Awarded");
 
     // Line generator
     const line = d3.line()
@@ -133,13 +133,17 @@ d3.csv("data.csv").then(data => {
             .style("opacity", 0);
     });
 
+    // Note on missing 1940 and 1944
+    d3.select("body").append("div")
+        .attr("class", "country-selection")
+        .html("<p>Note that there were no Olympics held in 1940 and 1944 due to WWII and hence the jump from 1936 to 1948</p>")
+
     // Add explanatory text for country selection
     d3.select("body").append("div")
         .attr("class", "country-selection")
         .html("<p>Select another country to compare:</p>")
       .append("select")
         .attr("id", "countryDropdown")
-        .style("margin-right", "10px") // Add margin to right
         .on("change", updateCountry);
 
     // Add button for toggling USA line
@@ -150,7 +154,6 @@ d3.csv("data.csv").then(data => {
       .append("button")
         .attr("id", "toggleUSAButton")
         .text("Toggle USA")
-        .style("margin-left", "10px") // Add margin to left
         .on("click", toggleUSA);
 
     // Style the dropdown and button
@@ -293,34 +296,34 @@ d3.csv("data.csv").then(data => {
         .attr("height", 18)
         .style("fill", "gray");
 
-    legend.append("text")
-        .attr("x", 24)
+        legend.append("text")
+        .attr("x", 20)
         .attr("y", 9)
         .attr("dy", ".35em")
         .text("Total Medals");
 
     legend.append("rect")
-        .attr("x", 120)
+        .attr("x", 125)
         .attr("y", 0)
         .attr("width", 18)
         .attr("height", 18)
         .style("fill", "steelblue");
 
     legend.append("text")
-        .attr("x", 144)
+        .attr("x", 145)
         .attr("y", 9)
         .attr("dy", ".35em")
         .text("USA");
 
     legend.append("rect")
-        .attr("x", 220)
+        .attr("x", 195)
         .attr("y", 0)
         .attr("width", 18)
         .attr("height", 18)
         .style("fill", "indianred");
 
     legend.append("text")
-        .attr("x", 244)
+        .attr("x", 215)
         .attr("y", 9)
         .attr("dy", ".35em")
         .text("Selected Country");

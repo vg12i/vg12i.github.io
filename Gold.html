@@ -30,9 +30,8 @@
             margin: 20px 0;
         }
         .dropdown button {
-            background-color: #ffffff;
             border: 2px solid #4a90e2;
-            color: #000000;
+            color: #ffffff;
             font-size: 16px;
             padding: 10px 20px;
             margin: 5px;
@@ -40,18 +39,26 @@
             border-radius: 5px;
             transition: background-color 0.3s, color 0.3s;
         }
-        .dropdown button:hover {
+        .dropdown button.homescreen {
             background-color: #4a90e2;
-            color: #ffffff;
         }
         .dropdown button.gold {
             background-color: #d4af37;
+            border: 2px solid #ae8b16;
+            color: #000000;
         }
         .dropdown button.silver {
             background-color: #c0c0c0;
+            border: 2px solid #989595;
+            color: #000000;
         }
         .dropdown button.bronze {
             background-color: #cd7f32;
+            border: 2px solid #9a5b1c;
+            color: #000000;
+        }
+        .dropdown button:hover {
+            opacity: 0.8;
         }
         .chart {
             margin: 40px;
@@ -66,9 +73,6 @@
         }
         .bar {
             fill: steelblue;
-        }
-        .bar:hover {
-            fill: orange;
         }
         .tooltip {
             position: absolute;
