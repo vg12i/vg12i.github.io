@@ -1,7 +1,5 @@
-// script.js
-
 // Define the dimensions of the SVG container
-const margin = { top: 50, right: 30, bottom: 70, left: 60 }; // Adjusted margins for more space
+const margin = { top: 50, right: 30, bottom: 70, left: 60 };
 const width = 960 - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 
@@ -19,7 +17,7 @@ svg.append("text")
     .attr("text-anchor", "middle")
     .attr("font-size", "24px")
     .attr("fill", "black")
-    .text("Gold Medals in the Olympics Over the Years");
+    .text("Bronze Medals in the Olympics Over the Years");
 
 // Load the data
 d3.csv("data.csv").then(data => {
@@ -28,31 +26,31 @@ d3.csv("data.csv").then(data => {
         d.Year = +d.Year;
     });
 
-    // Aggregate the number of gold medals per year and by country
-    const aggregateGoldMedals = (filteredData) => {
-        const goldMedalsPerYear = d3.rollup(filteredData, v => d3.sum(v, d => d.Medal === "Gold" ? 1 : 0), d => d.Year);
-        return Array.from(goldMedalsPerYear, ([Year, GoldMedals]) => ({ Year, GoldMedals }));
+    // Aggregate the number of Bronze medals per year and by country
+    const aggregateBronzeMedals = (filteredData) => {
+        const BronzeMedalsPerYear = d3.rollup(filteredData, v => d3.sum(v, d => d.Medal === "Bronze" ? 1 : 0), d => d.Year);
+        return Array.from(BronzeMedalsPerYear, ([Year, BronzeMedals]) => ({ Year, BronzeMedals }));
     };
 
-    const aggregateTotalGoldMedals = (data) => {
-        const totalGoldMedalsPerYear = d3.rollup(data, v => d3.sum(v, d => d.Medal === "Gold" ? 1 : 0), d => d.Year, d => d.City);
-        return Array.from(totalGoldMedalsPerYear, ([Year, cityMap]) => ({
+    const aggregateTotalBronzeMedals = (data) => {
+        const totalBronzeMedalsPerYear = d3.rollup(data, v => d3.sum(v, d => d.Medal === "Bronze" ? 1 : 0), d => d.Year, d => d.City);
+        return Array.from(totalBronzeMedalsPerYear, ([Year, cityMap]) => ({
             Year,
-            GoldMedals: Array.from(cityMap.values()).reduce((sum, value) => sum + value, 0),
+            BronzeMedals: Array.from(cityMap.values()).reduce((sum, value) => sum + value, 0),
             City: Array.from(cityMap.keys()).join(", ")
         }));
     };
 
-    const totalGoldMedalsData = aggregateTotalGoldMedals(data);
+    const totalBronzeMedalsData = aggregateTotalBronzeMedals(data);
 
     // Define the scales and axes
     const x = d3.scaleBand()
-        .domain(totalGoldMedalsData.map(d => d.Year))
+        .domain(totalBronzeMedalsData.map(d => d.Year))
         .range([0, width])
         .padding(0.1);
 
     const y = d3.scaleLinear()
-        .domain([0, d3.max(totalGoldMedalsData, d => d.GoldMedals)])
+        .domain([0, d3.max(totalBronzeMedalsData, d => d.BronzeMedals)])
         .nice()
         .range([height, 0]);
 
@@ -85,11 +83,11 @@ d3.csv("data.csv").then(data => {
     // Line generator
     const line = d3.line()
         .x(d => x(d.Year) + x.bandwidth() / 2)
-        .y(d => y(d.GoldMedals));
+        .y(d => y(d.BronzeMedals));
 
     // Add the line for the total data
     const totalPath = svg.append("path")
-        .datum(totalGoldMedalsData)
+        .datum(totalBronzeMedalsData)
         .attr("fill", "none")
         .attr("stroke", "gray")
         .attr("stroke-width", 2)
@@ -97,24 +95,24 @@ d3.csv("data.csv").then(data => {
 
     // Add points for total data
     const totalPoints = svg.selectAll(".totalPoint")
-        .data(totalGoldMedalsData)
+        .data(totalBronzeMedalsData)
       .enter().append("circle")
         .attr("class", "totalPoint")
         .attr("cx", d => x(d.Year) + x.bandwidth() / 2)
-        .attr("cy", d => y(d.GoldMedals))
+        .attr("cy", d => y(d.BronzeMedals))
         .attr("r", 4)
         .attr("fill", "gray");
 
     // Add text for total data (permanent display)
     svg.selectAll(".totalText")
-        .data(totalGoldMedalsData)
+        .data(totalBronzeMedalsData)
       .enter().append("text")
         .attr("class", "totalText")
         .attr("x", d => x(d.Year) + x.bandwidth() / 2)
-        .attr("y", d => y(d.GoldMedals) - 10)
+        .attr("y", d => y(d.BronzeMedals) - 10)
         .attr("text-anchor", "middle")
         .attr("fill", "gray")
-        .text(d => d.GoldMedals);
+        .text(d => d.BronzeMedals);
 
     // Add tooltips for total data
     const tooltip = d3.select("body").append("div")
@@ -189,16 +187,16 @@ d3.csv("data.csv").then(data => {
         const selectedCountry = d3.select("#countryDropdown").property("value");
 
         const filteredData = selectedCountry ? data.filter(d => d.Country === selectedCountry) : [];
-        const filteredGoldMedalsData = aggregateGoldMedals(filteredData);
+        const filteredBronzeMedalsData = aggregateBronzeMedals(filteredData);
 
         // Update the selected country line
         svg.selectAll(".countryLine").remove();
         svg.selectAll(".countryPoint").remove();
         svg.selectAll(".countryText").remove();
 
-        if (filteredGoldMedalsData.length > 0) {
+        if (filteredBronzeMedalsData.length > 0) {
             svg.append("path")
-                .datum(filteredGoldMedalsData)
+                .datum(filteredBronzeMedalsData)
                 .attr("class", "countryLine")
                 .attr("fill", "none")
                 .attr("stroke", "indianred")
@@ -206,24 +204,24 @@ d3.csv("data.csv").then(data => {
                 .attr("d", line);
 
             const countryPoints = svg.selectAll(".countryPoint")
-                .data(filteredGoldMedalsData)
+                .data(filteredBronzeMedalsData)
               .enter().append("circle")
                 .attr("class", "countryPoint")
                 .attr("cx", d => x(d.Year) + x.bandwidth() / 2)
-                .attr("cy", d => y(d.GoldMedals))
+                .attr("cy", d => y(d.BronzeMedals))
                 .attr("r", 4)
                 .attr("fill", "indianred");
 
             const countryText = svg.selectAll(".countryText")
-                .data(filteredGoldMedalsData)
+                .data(filteredBronzeMedalsData)
               .enter().append("text")
                 .attr("class", "countryText")
                 .attr("x", d => x(d.Year) + x.bandwidth() / 2)
-                .attr("y", d => y(d.GoldMedals) - 10)
+                .attr("y", d => y(d.BronzeMedals) - 10)
                 .attr("text-anchor", "middle")
                 .attr("fill", "indianred")
                 .style("display", "none")
-                .text(d => d.GoldMedals);
+                .text(d => d.BronzeMedals);
 
             countryPoints.on("mouseover", function(event, d) {
                 d3.select(this).attr("r", 6); // Enlarge the point on hover
@@ -242,10 +240,10 @@ d3.csv("data.csv").then(data => {
 
         if (usaLineVisible) {
             const usaData = data.filter(d => d.Country === "USA");
-            const usaGoldMedalsData = aggregateGoldMedals(usaData);
+            const usaBronzeMedalsData = aggregateBronzeMedals(usaData);
 
             svg.append("path")
-                .datum(usaGoldMedalsData)
+                .datum(usaBronzeMedalsData)
                 .attr("class", "usaLine")
                 .attr("fill", "none")
                 .attr("stroke", "steelblue")
@@ -253,24 +251,24 @@ d3.csv("data.csv").then(data => {
                 .attr("d", line);
 
             const usaPoints = svg.selectAll(".usaPoint")
-                .data(usaGoldMedalsData)
+                .data(usaBronzeMedalsData)
               .enter().append("circle")
                 .attr("class", "usaPoint")
                 .attr("cx", d => x(d.Year) + x.bandwidth() / 2)
-                .attr("cy", d => y(d.GoldMedals))
+                .attr("cy", d => y(d.BronzeMedals))
                 .attr("r", 4)
                 .attr("fill", "steelblue");
 
             const usaText = svg.selectAll(".usaText")
-                .data(usaGoldMedalsData)
+                .data(usaBronzeMedalsData)
               .enter().append("text")
                 .attr("class", "usaText")
                 .attr("x", d => x(d.Year) + x.bandwidth() / 2)
-                .attr("y", d => y(d.GoldMedals) - 10)
+                .attr("y", d => y(d.BronzeMedals) - 10)
                 .attr("text-anchor", "middle")
                 .attr("fill", "steelblue")
                 .style("display", "none")
-                .text(d => d.GoldMedals);
+                .text(d => d.BronzeMedals);
 
             usaPoints.on("mouseover", function(event, d) {
                 d3.select(this).attr("r", 6); // Enlarge the point on hover

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS416 Project: Olympic Medals Visualization</title>
+    <title>Bronze Medals Visualization</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <style>
         body {
@@ -25,16 +25,14 @@
             font-size: 24px;
             width: 100%;
             box-sizing: border-box;
-            margin-bottom: 20px;
         }
         .dropdown {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 40px;
+            margin: 20px 0;
         }
         .dropdown button {
+            background-color: #ffffff;
             border: 2px solid #4a90e2;
-            color: #ffffff;
+            color: #4a90e2;
             font-size: 16px;
             padding: 10px 20px;
             margin: 5px;
@@ -42,20 +40,9 @@
             border-radius: 5px;
             transition: background-color 0.3s, color 0.3s;
         }
-        .dropdown button.homescreen {
-            background-color: #4a90e2;
-        }
-        .dropdown button.gold {
-            background-color: #d4af37;
-        }
-        .dropdown button.silver {
-            background-color: #c0c0c0;
-        }
-        .dropdown button.bronze {
-            background-color: #cd7f32;
-        }
         .dropdown button:hover {
-            opacity: 0.8;
+            background-color: #4a90e2;
+            color: #ffffff;
         }
         .chart {
             margin: 40px;
@@ -91,16 +78,17 @@
 </head>
 <body>
     <header>
-        Olympics Medal Data Visualization by Country
+        Olympics Medal Data Visualization - Bronze Medals
     </header>
 
     <div class="dropdown">
-        <button class="homescreen" onclick="location.href='index.html'">Homescreen</button>
-        <button class="gold" onclick="location.href='gold.html'">Gold</button>
-        <button class="silver" onclick="location.href='silver.html'">Silver</button>
-        <button class="bronze" onclick="location.href='bronze.html'">Bronze</button>
+        <button onclick="location.href='index.html'">Homescreen</button>
+        <button onclick="location.href='gold.html'">Gold</button>
+        <button onclick="location.href='silver.html'">Silver</button>
+        <button onclick="location.href='bronze.html'">Bronze</button>
     </div>
 
     <div id="visualization"></div>
+    <script src="bronze.js"></script>
 </body>
 </html>
