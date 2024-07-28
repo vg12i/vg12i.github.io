@@ -32,7 +32,7 @@
         .dropdown button {
             background-color: #ffffff;
             border: 2px solid #4a90e2;
-            color: #4a90e2;
+            color: #000000;
             font-size: 16px;
             padding: 10px 20px;
             margin: 5px;
@@ -43,6 +43,15 @@
         .dropdown button:hover {
             background-color: #4a90e2;
             color: #ffffff;
+        }
+        .dropdown button.gold {
+            background-color: #d4af37;
+        }
+        .dropdown button.silver {
+            background-color: #c0c0c0;
+        }
+        .dropdown button.bronze {
+            background-color: #cd7f32;
         }
         .chart {
             margin: 40px;
@@ -82,13 +91,13 @@
     </header>
 
     <div class="dropdown">
-        <button onclick="location.href='index.html'">Homescreen</button>
-        <button onclick="location.href='Gold.html'">Gold</button>
-        <button onclick="location.href='Silver.html'">Silver</button>
-        <button onclick="location.href='Bronze.html'">Bronze</button>
+        <button class="homescreen" onclick="location.href='index.html'">Homescreen</button>
+        <button class="gold" onclick="location.href='Gold.html'">Gold</button>
+        <button class="silver" onclick="location.href='Silver.html'">Silver</button>
+        <button class="bronze" onclick="location.href='Bronze.html'">Bronze</button>
     </div>
 
     <div id="visualization"></div>
-    <script src="gold.js"></script>
+    <script src="Gold.js"></script>
 </body>
 </html>
